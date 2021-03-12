@@ -1,2 +1,2 @@
-# render-app
+# Extendo-render
 App that delivers great custom renderers
