@@ -2,7 +2,7 @@ shared:
   - source: ./render/math.js
     target: math.js   # will surface as apps://extendo-render/math.js
 internal:
-  - target: ./render/mermaid/code.js
+  - source: ./render/mermaid/code.js
 installed:
   - source: ./render/mermaid/extension.yaml
     target: render/github/mermaid/extension.yaml

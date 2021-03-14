@@ -1,1 +1,3 @@
-return { html: '<p>Some great math goin on here</p>'}
+() => {
+  return { html: '<p>Some great math goin on here</p>' }
+}

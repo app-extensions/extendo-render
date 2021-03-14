@@ -1,1 +1,3 @@
-return { html: '<p>mermaid content rendered</p>' }
+() => {
+  return { html: '<p>mermaid content rendered</p>' }
+}
