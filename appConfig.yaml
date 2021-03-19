@@ -1,10 +1,9 @@
 shared: 
-  - source: ./render/math.js
-    target: math.js   # will surface as apps://extendo-render/math.js
+  - source: ./math/dist/index.js
+    target: math   # will surface as apps://extendo-render/math
 internal:
-  - source: ./render/mermaid/code.js
+  - source: docker://extendo-render/mermaid
+    target: mermaid
 installed:
-  - source: ./render/mermaid/extension.yaml
+  - source: ./mermaid/extension.yaml
     target: render/github/mermaid/extension.yaml
-
-

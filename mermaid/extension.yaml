@@ -1,0 +1,9 @@
+
+name: Mermaid chart rendering
+description: Render charts and stuff with Mermaid
+
+render:
+  markdown:
+    uses: apps://extendo-render/mermaid
+    with:
+      dummy: 'test arg'

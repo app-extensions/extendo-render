@@ -1,0 +1,23 @@
+{
+  "name": "extendo-render-mermaid",
+  "version": "0.0.1",
+  "description": "Mermaid rendering extenions for GitHub",
+  "main": "mermaid.js",
+  "scripts": {
+    "build": "ncc build -m",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/app-extensions/extendo-render.git"
+  },
+  "author": "jeffmcaffer@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/app-extensions/extendo-render/issues"
+  },
+  "homepage": "https://github.com/app-extensions/extendo-render#readme",
+  "dependencies": {
+    "@mermaid-js/mermaid-cli": "^8.9.1"
+  }
+}
