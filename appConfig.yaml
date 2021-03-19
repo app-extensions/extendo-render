@@ -2,7 +2,7 @@ shared:
   - source: ./math/dist/index.js
     target: math   # will surface as apps://extendo-render/math
 internal:
-  - source: docker://extendo-render/mermaid
+  - source: docker://extendo-render:mermaid
     target: mermaid   # will surface as apps://extendo-render/mermaid for reference internally
     commandLine: mermaid
 installed:
