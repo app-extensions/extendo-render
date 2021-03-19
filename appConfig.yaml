@@ -3,7 +3,8 @@ shared:
     target: math   # will surface as apps://extendo-render/math
 internal:
   - source: docker://extendo-render/mermaid
-    target: mermaid
+    target: mermaid   # will surface as apps://extendo-render/mermaid for reference internally
+    commandLine: mermaid
 installed:
   - source: ./mermaid/extension.yaml
     target: render/github/mermaid/extension.yaml
