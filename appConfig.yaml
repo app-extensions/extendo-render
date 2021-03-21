@@ -4,7 +4,7 @@ shared:
 internal:
   - source: docker://extendo-render:mermaid
     target: mermaid   # will surface as apps://extendo-render/mermaid for reference internally
-    commandLine: mermaid
+    commandLine: node /mermaid.js
 installed:
   - source: ./mermaid/extension.yaml
     target: render/github/mermaid/extension.yaml
