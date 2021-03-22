@@ -6,9 +6,10 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-const dataDir = '/extendo-compute'
+const dataDir = '/tmp/extendo-compute'
 const inputFile = `${dataDir}/input.json`
 const outputFile = `${dataDir}/output.json`
+const errorFile = `${dataDir}/error.json`
 
 const defaultConfig = { theme: 'default' }
 const defaultBackground = 'white'
@@ -76,7 +77,7 @@ module.exports = async () => {
     await fs.writeFile(outputFile, JSON.stringify(response))
   } catch (error) {
     console.log(error.message)
-    await fs.writeFile(outputFile, JSON.stringify({ error }, null, 2))
+    await fs.writeFile(errorFile, JSON.stringify({ error }, null, 2))
     process.exit(1)
   }
 }

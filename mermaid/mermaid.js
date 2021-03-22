@@ -1,7 +1,3 @@
-#!/usr/local/bin/node
-
-const { local } = require('d3-selection')
-
 try {
   console.log('about to run ...')
   require('./render')()
