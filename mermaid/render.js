@@ -17,10 +17,10 @@ const defaultBackground = 'white'
 const defaultViewPort = {
   deviceScaleFactor: 1,
   hasTouch: false,
-  height: 1080,
+  height: 600,
   isLandscape: true,
   isMobile: false,
-  width: 1920,
+  width: 800,
 };
 
 const defaultArgs = [
@@ -64,48 +64,35 @@ const defaultArgs = [
   '--single-process'
 ];
 
-
 const log = []
 
 async function render(definition, inputs) {
-  console.log('1 ...')
   const browser = await puppeteer.launch({ args: defaultArgs })
-  console.log('2 ...')
   try {
     const page = await browser.newPage();
-    console.log('3 ...')
     page.setViewport({ ...defaultViewPort, ...inputs.viewPort });
     await page.goto(`file://${path.join(__dirname, './node_modules/@mermaid-js/mermaid-cli', 'index.html')}`);
     page.on('console', consoleObj => console.log(consoleObj.text()))
-    console.log('4 ...')
     await page.evaluate(`document.body.style.background = '${inputs.backgroundColor || defaultBackground}'`);
-    console.log('5 ...')
 
     const setup = (container, definition, config) => {
       container.textContent = definition;
-      console.log('before Mermaid initialize')
       window.mermaid.initialize(config);
       try {
-        console.log('before Mermaid init')
         window.mermaid.init(undefined, container);
-        console.log('after Mermaid init')
         return { status: 'success' };
       } catch (error) {
         return { status: 'error', error, message: error.message };
       }
     }
     const config = { ...defaultConfig, ...inputs.config }
-    console.log('before $eval 1 ...')
     const result = await page.$eval('#container', setup, definition, config);
-    console.log('after $eval 1 ...')
     if (result.status === 'error') throw new Error(result.message);
 
     // await before returning to be sure we're good before the finally
-    console.log('before $eval 2 ...')
     const svg = await page.$eval('#container', container => container.innerHTML)
     return svg
   } finally {
-    console.log('closing ...')
     await browser.close();
   }
 }
@@ -113,15 +100,11 @@ async function render(definition, inputs) {
 module.exports = async () => {
   try {
     const inputData = await fs.readFile(inputFile)
-    console.log(inputData.toString())
     const { content, inputs } = JSON.parse(inputData.toString())
-    console.log('after parse...')
     const svg = await render(content, inputs)
-    console.log('back from render ...')
     const response = { html: svg }
     await fs.writeFile(outputFile, JSON.stringify(response))
   } catch (error) {
-    console.log(error.message)
     await fs.writeFile(errorFile, JSON.stringify({ error, log }, null, 2))
     process.exit(1)
   }
