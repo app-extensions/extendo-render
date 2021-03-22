@@ -78,8 +78,8 @@ async function render(definition, inputs) {
 module.exports = async () => {
   try {
     const inputData = await fs.readFile(inputFile)
-    log.push(inputData)
-    const { content, inputs } = JSON.parse(inputData)
+    log.push(inputData.toString())
+    const { content, inputs } = JSON.parse(inputData.toString())
     const svg = await render(content, inputs)
     log.push('back from render ...')
     console.log(svg)
