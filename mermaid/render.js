@@ -37,31 +37,35 @@ async function render(definition, inputs) {
   console.log('In runner...')
   const browser = await createBrowser(process.env.MODE || 'local')
   console.log('2 ...')
-  const page = await browser.newPage();
-  console.log('3 ...')
-  page.setViewport({ ...defaultViewPort, ...inputs.viewPort });
-  await page.goto(`file://${path.join(__dirname, './node_modules/@mermaid-js/mermaid-cli', 'index.html')}`);
-  console.log('4 ...')
-  await page.evaluate(`document.body.style.background = '${inputs.backgroundColor || defaultBackground}'`);
+  try {
+    const page = await browser.newPage();
+    console.log('3 ...')
+    page.setViewport({ ...defaultViewPort, ...inputs.viewPort });
+    await page.goto(`file://${path.join(__dirname, './node_modules/@mermaid-js/mermaid-cli', 'index.html')}`);
+    console.log('4 ...')
+    await page.evaluate(`document.body.style.background = '${inputs.backgroundColor || defaultBackground}'`);
 
-  function setup(container, definition, config) {
-    console.log('in setup ...')
-    container.textContent = definition;
-    window.mermaid.initialize(config);
-    try {
-      window.mermaid.init(undefined, container);
-      return { status: 'success' };
-    } catch (error) {
-      return { status: 'error', error, message: error.message };
+    const setup = (container, definition, config) => {
+      console.log('in setup ...')
+      container.textContent = definition;
+      window.mermaid.initialize(config);
+      try {
+        window.mermaid.init(undefined, container);
+        return { status: 'success' };
+      } catch (error) {
+        return { status: 'error', error, message: error.message };
+      }
     }
-  }
-  const config = { ...defaultConfig, ...inputs.config }
-  const result = await page.$eval('#container', setup, definition, config);
-  if (result.status === 'error') throw new Error(result.message);
+    const config = { ...defaultConfig, ...inputs.config }
+    const result = await page.$eval('#container', setup, definition, config);
+    if (result.status === 'error') throw new Error(result.message);
 
-  const svg = await page.$eval('#container', container => container.innerHTML)
-  await browser.close();
-  return svg
+    // await before returning to be sure we're good before the finally
+    const svg = await page.$eval('#container', container => container.innerHTML)
+    return svg
+  } finally {
+    await browser.close();
+  }
 }
 
 console.log('starting')
@@ -70,8 +74,8 @@ module.exports = async () => {
   try {
     const inputData = await fs.readFile(inputFile)
     console.log(inputData)
-    const { content, options } = JSON.parse(inputData)
-    const svg = await render(content, options)
+    const { content, inputs } = JSON.parse(inputData)
+    const svg = await render(content, inputs)
     console.log(svg)
     const response = { html: svg }
     await fs.writeFile(outputFile, JSON.stringify(response))
