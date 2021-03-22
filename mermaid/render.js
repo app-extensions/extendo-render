@@ -5,6 +5,7 @@
 
 const fs = require('fs').promises;
 const path = require('path');
+const puppeteer = require('puppeteer')
 
 const dataDir = '/tmp/extendo-compute'
 const inputFile = `${dataDir}/input.json`
@@ -13,30 +14,63 @@ const errorFile = `${dataDir}/error.json`
 
 const defaultConfig = { theme: 'default' }
 const defaultBackground = 'white'
-const defaultViewPort = { width: 800, height: 600, deviceScaleFactor: 1 }
+const defaultViewPort = {
+  deviceScaleFactor: 1,
+  hasTouch: false,
+  height: 1080,
+  isLandscape: true,
+  isMobile: false,
+  width: 1920,
+};
+
+const defaultArgs = [
+  '--autoplay-policy=user-gesture-required',
+  '--disable-background-networking',
+  '--disable-background-timer-throttling',
+  '--disable-backgrounding-occluded-windows',
+  '--disable-breakpad',
+  '--disable-client-side-phishing-detection',
+  '--disable-component-update',
+  '--disable-default-apps',
+  '--disable-dev-shm-usage',
+  '--disable-domain-reliability',
+  '--disable-extensions',
+  '--disable-features=AudioServiceOutOfProcess,IsolateOrigins,site-per-process',
+  '--disable-hang-monitor',
+  '--disable-ipc-flooding-protection',
+  '--disable-offer-store-unmasked-wallet-cards',
+  '--disable-popup-blocking',
+  '--disable-print-preview',
+  '--disable-prompt-on-repost',
+  '--disable-renderer-backgrounding',
+  '--disable-setuid-sandbox',
+  '--disable-speech-api',
+  '--disable-sync',
+  '--disable-web-security',
+  '--disk-cache-size=33554432',
+  '--hide-scrollbars',
+  '--ignore-gpu-blocklist',
+  '--metrics-recording-only',
+  '--mute-audio',
+  '--no-default-browser-check',
+  '--no-first-run',
+  '--no-pings',
+  '--no-sandbox',
+  '--no-zygote',
+  '--password-store=basic',
+  '--use-gl=swiftshader',
+  '--use-mock-keychain',
+  '--window-size=1920,1080',
+  '--single-process'
+];
+
 
 const log = []
 
-async function createBrowser(mode) {
-  if (mode === 'lambda') {
-    const chromium = require('chrome-aws-lambda');
-    const params = {
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
-      headless: true, // chromium.headless,
-      ignoreHTTPSErrors: true,
-    }
-    return chromium.puppeteer.launch(params)
-  } else if (mode === 'local') {
-    const puppeteer = require('puppeteer')
-    return puppeteer.launch({ args: ['--no-sandbox'] })
-  }
-}
-
 async function render(definition, inputs) {
-  const browser = await createBrowser(process.env.MODE || 'local')
   console.log('1 ...')
+  const browser = await puppeteer.launch({ args: defaultArgs })
+  console.log('2 ...')
   try {
     const page = await browser.newPage();
     console.log('3 ...')
@@ -81,6 +115,7 @@ module.exports = async () => {
     const inputData = await fs.readFile(inputFile)
     console.log(inputData.toString())
     const { content, inputs } = JSON.parse(inputData.toString())
+    console.log('after parse...')
     const svg = await render(content, inputs)
     console.log('back from render ...')
     const response = { html: svg }
