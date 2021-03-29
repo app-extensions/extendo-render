@@ -1,0 +1,9 @@
+
+name: Jupyter notebook rendering
+description: Render Jupyter Notebooks with nbconvert
+
+render:
+  file:
+    uses: apps://extendo-render/jupyter
+    with:
+      dummy: 'test arg'

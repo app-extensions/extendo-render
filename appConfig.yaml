@@ -5,6 +5,13 @@ internal:
   - actual: docker://extendo-render:mermaid
     logical: mermaid   # will surface as apps://extendo-render/mermaid for reference internally
     commandLine: node /mermaid.js
+  - actual: docker://extendo-render:jupyter
+    logical: jupyter   # will surface as apps://extendo-render/jupyter for reference internally
+    commandLine: node /jupyter.js
 installed:
   - actual: ./mermaid/extension.yaml
     logical: render/github/mermaid/extension.yaml
+  # - actual: ./stl/stl.js
+  #   logical: render/gitub/stl.js
+  - actual: ./jupyter/extension.yaml
+    logical: render/github/ipynb.yaml

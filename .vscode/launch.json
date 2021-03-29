@@ -5,6 +5,16 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Jupyter",
+      "program": "${workspaceFolder}/jupyter/render.js",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "pwa-node",
+      "cwd": "${workspaceFolder}/jupyter"
+    },
+    {
       "type": "pwa-node",
       "request": "launch",
       "name": "Launch Program",
