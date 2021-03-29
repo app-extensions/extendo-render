@@ -1,4 +1,9 @@
 # https://github.com/jgoldfar/pandoc-nbconvert-docker
+FROM node:buster-slim as node
+COPY package.json package-lock.json /
+WORKDIR /
+RUN npm ci
+
 FROM python:3.9.2-buster
 
 # install node
@@ -29,5 +34,5 @@ WORKDIR /
 # CMD ["--help"]
 
 COPY jupyter.js render.js /
-COPY ./node_modules ./node_modules
+COPY --from=node /node_modules /node_modules
 ENTRYPOINT [ "node", "/jupyter.js" ]

@@ -28,6 +28,5 @@ jobs:
         IMAGE_TAG: jupyter
       run: |
         cd jupyter
-        npm ci
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
