@@ -19,3 +19,4 @@ node --unhandled-rejections=strict --trace-warnings ./test.js -i /tmp/content.mm
 node ./node_modules/@mermaid-js/mermaid-cli/test.js -i /tmp/content.mmd -o /tmp/content.svg -p ./puppeteer-config.json
 
 node ./test.js
+ 
