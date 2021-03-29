@@ -9,7 +9,7 @@ FROM python:3.9.2-buster
 # install node
 RUN apt-get update -y && \
     apt-get install -y -o Acquire::Retries=10 --no-install-recommends \
-    nodejs
+    nodejs npm
 
 RUN pip3 install nbconvert
 
