@@ -43,7 +43,7 @@ async function fetchFiles(base, files) {
   for (const file of files) {
     const url = new URL(file, base).toString()
     const destination = path.join(dataDir, file)
-    await(fetchFile(url, destination))
+    await(fetchFile(`${url}?raw=true`, destination))
   }
 }
 

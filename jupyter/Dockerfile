@@ -1,38 +1,31 @@
-# https://github.com/jgoldfar/pandoc-nbconvert-docker
-FROM node:buster-slim as node
-COPY package.json package-lock.json /
-WORKDIR /
-RUN npm ci
+# Start off with a slimmed down Node image and install python.  The python base images seem
+# to have too much and it confuses jupyter
+FROM node:buster-slim 
 
-FROM python:3.9.2-buster
-
-# install node
 RUN apt-get update -y && \
     apt-get install -y -o Acquire::Retries=10 --no-install-recommends \
-    nodejs npm
-
-RUN pip3 install nbconvert
+    python3 \
+    python3-pip 
 
 RUN python3 -m pip install ipykernel
-RUN python3 -m ipykernel install --user
-RUN python3 -m pip install --user matplotlib
-RUN python3 -m pip install --user ipywidgets
-RUN python3 -m pip install --user numpy
-RUN python3 -m pip install --user scipy
-
-# Set CWD to /source on entry.
-# Add -v `pwd`:/source to your run command to make the files in your working
-# directory available to pandoc or jupyter
-# WORKDIR /source
+RUN python3 -m ipykernel install
+RUN python3 -m pip install notebook
+RUN python3 -m pip install nbconvert
+RUN python3 -m pip install matplotlib
+RUN python3 -m pip install ipywidgets
+RUN python3 -m pip install numpy
+RUN python3 -m pip install scipy
 
 WORKDIR /
 
-# Expose /source as an external volume
-# VOLUME /source
+# Point python and matplotlib working directories to /tmp since in lambda that's the only writable spot
+ENV IPYTHONDIR=/tmp/_ipython
+ENV TMPDIR=/tmp
+ENV TEMP=/tmp
+ENV TMP=/tmp
+ENV MPLCONFIGDIR=/tmp
 
-# ENTRYPOINT ["/usr/local/bin/jupyter"]
-# CMD ["--help"]
+COPY jupyter.js render.js touch package.json package-lock.json /
+RUN npm ci
 
-COPY jupyter.js render.js /
-COPY --from=node /node_modules /node_modules
 ENTRYPOINT [ "node", "/jupyter.js" ]
