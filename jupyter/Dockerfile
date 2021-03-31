@@ -25,7 +25,7 @@ ENV TEMP=/tmp
 ENV TMP=/tmp
 ENV MPLCONFIGDIR=/tmp
 
-COPY jupyter.js render.js touch package.json package-lock.json /
+COPY jupyter.js render.js package.json package-lock.json /
 RUN npm ci
 
 ENTRYPOINT [ "node", "/jupyter.js" ]
