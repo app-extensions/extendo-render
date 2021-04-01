@@ -5,6 +5,26 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Markvis",
+      "program": "${workspaceFolder}/markvis/debug.js",
+      "cwd": "${workspaceFolder}/markvis",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "pwa-node"
+    },
+    {
+      "name": "JS prettify",
+      "program": "${workspaceFolder}/js/debug.js",
+      "cwd": "${workspaceFolder}/js",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "pwa-node"
+    },
+    {
       "name": "Jupyter",
       "program": "${workspaceFolder}/jupyter/render.js",
       "request": "launch",

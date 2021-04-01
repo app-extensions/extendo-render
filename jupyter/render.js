@@ -50,6 +50,7 @@ async function fetchFiles(base, files) {
 async function fetchFile(url, name) {
   const token = process.env.GITHUB_TOKEN
   const options = token ? { headers: { token } } : {}
+  // TODO change to use Octokit
   const response = await got(url, options)
   const content = response.body
   await fs.writeFile(name, content)

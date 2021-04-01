@@ -109,3 +109,5 @@ typings/
 
 *.pem
 config.yaml
+js/dist
+markvis/dist
