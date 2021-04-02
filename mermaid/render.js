@@ -1,16 +1,5 @@
-/**
- * Simple script that takes an `input.json` that captures the parameters, options, token, ...
- * for a GitHub rendering request, does the (mermaid) rendering and drops the output in `output.json`
- */
-
-const fs = require('fs').promises;
-const path = require('path');
+const path = require('path')
 const puppeteer = require('puppeteer')
-
-const dataDir = '/tmp/extendo-compute'
-const inputFile = `${dataDir}/input.json`
-const outputFile = `${dataDir}/output.json`
-const errorFile = `${dataDir}/error.json`
 
 const defaultConfig = { theme: 'default' }
 const defaultBackground = 'white'
@@ -21,7 +10,7 @@ const defaultViewPort = {
   isLandscape: true,
   isMobile: false,
   width: 800,
-};
+}
 
 const defaultArgs = [
   '--autoplay-policy=user-gesture-required',
@@ -62,50 +51,35 @@ const defaultArgs = [
   '--use-mock-keychain',
   '--window-size=1920,1080',
   '--single-process'
-];
+]
 
-const log = []
-
-async function render(definition, inputs) {
+module.exports = async ({ content, inputs }) => {
   const browser = await puppeteer.launch({ args: defaultArgs })
   try {
-    const page = await browser.newPage();
-    page.setViewport({ ...defaultViewPort, ...inputs.viewPort });
-    await page.goto(`file://${path.join(__dirname, './node_modules/@mermaid-js/mermaid-cli', 'index.html')}`);
+    const page = await browser.newPage()
+    page.setViewport({ ...defaultViewPort, ...inputs.viewPort })
+    await page.goto(`file://${path.join(__dirname, './node_modules/@mermaid-js/mermaid-cli', 'index.html')}`)
     page.on('console', consoleObj => console.log(consoleObj.text()))
-    await page.evaluate(`document.body.style.background = '${inputs.backgroundColor || defaultBackground}'`);
+    await page.evaluate(`document.body.style.background = '${inputs.backgroundColor || defaultBackground}'`)
 
-    const setup = (container, definition, config) => {
-      container.textContent = definition;
-      window.mermaid.initialize(config);
+    const setup = (container, content, config) => {
+      container.textContent = content
+      window.mermaid.initialize(config)
       try {
-        window.mermaid.init(undefined, container);
-        return { status: 'success' };
+        window.mermaid.init(undefined, container)
+        return { status: 'success' }
       } catch (error) {
-        return { status: 'error', error, message: error.message };
+        return { status: 'error', error, message: error.message }
       }
     }
     const config = { ...defaultConfig, ...inputs.config }
-    const result = await page.$eval('#container', setup, definition, config);
-    if (result.status === 'error') throw new Error(result.message);
+    const result = await page.$eval('#container', setup, content, config)
+    if (result.status === 'error') throw new Error(result.message)
 
     // await before returning to be sure we're good before the finally
     const svg = await page.$eval('#container', container => container.innerHTML)
-    return svg
+    return { html: svg }
   } finally {
-    await browser.close();
-  }
-}
-
-module.exports = async () => {
-  try {
-    const inputData = await fs.readFile(inputFile)
-    const { content, inputs } = JSON.parse(inputData.toString())
-    const svg = await render(content, inputs)
-    const response = { html: svg }
-    await fs.writeFile(outputFile, JSON.stringify(response))
-  } catch (error) {
-    await fs.writeFile(errorFile, JSON.stringify({ error, log }, null, 2))
-    process.exit(1)
+    await browser.close()
   }
 }

@@ -29,7 +29,7 @@ ENV JUPYTER_CONFIG_DIR=/tmp/jupyter
 # May need to copy this over as the nbconvert files are in there but the jupyter config path still points there...
 # COPY /usr/local/etc/jupyter /tmp/jupyter
 
-COPY jupyter.js render.js package.json package-lock.json /
+COPY index.js render.js package.json package-lock.json /
 RUN npm ci
 
-ENTRYPOINT [ "node", "/jupyter.js" ]
+ENTRYPOINT [ "node", "/index.js" ]

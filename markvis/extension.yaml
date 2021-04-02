@@ -1,0 +1,7 @@
+name: Markvis rendering
+description: Markvis rendering in markdown
+
+render:
+  markdown:
+    uses: ./index.js
+ 

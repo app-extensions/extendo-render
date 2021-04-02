@@ -5,22 +5,17 @@
 
 const fs = require('fs').promises
 const childProcess = require('child_process')
-const got = require('got')
 const { get } = require('lodash')
 const path = require('path').posix
 
 const dataDir = '/tmp/extendo-compute'
-const inputFile = `${dataDir}/input.json`
 const inputNotebookFile = `${dataDir}/input.ipynb`
 const outputHTMLFile = `${dataDir}/input.html`
-const outputFile = `${dataDir}/output.json`
-const errorFile = `${dataDir}/error.json`
 
-async function render(url, inputs) {
-  const source = await fetchFile(url, inputNotebookFile)
-  const notebook = JSON.parse(source)
+module.exports = async ({content, context, inputs}) => {
+  const notebook = JSON.parse(content)
   inputs = { ...(get(notebook, 'metadata.github.render') || {}), ...(inputs || {}) }
-  if (inputs.files) await fetchFiles(url, inputs.files)
+  if (inputs.files) await fetchFiles(context.github, context.target, inputs.files)
 
   const execute = inputs.execute ? '--execute' : ''
   const commandLine = `jupyter nbconvert --to HTML --log-level WARN ${execute} ${inputNotebookFile}`
@@ -36,39 +31,20 @@ async function render(url, inputs) {
     })
   })
   const result = await fs.readFile(outputHTMLFile)
-  return result.toString()
+  return { html: result.toString() }
 }
 
-async function fetchFiles(base, files) {
+async function fetchFiles(github, target, files) {
   for (const file of files) {
-    const url = new URL(file, base).toString()
     const destination = path.join(dataDir, file)
-    await(fetchFile(`${url}?raw=true`, destination))
+    const source = { ...target, path: path.join(path.dirname(target.path), file) }
+    await fetchFile(github, source, destination)
   }
 }
 
-async function fetchFile(url, name) {
-  const token = process.env.GITHUB_TOKEN
-  const options = token ? { headers: { token } } : {}
-  // TODO change to use Octokit
-  const response = await got(url, options)
-  const content = response.body
-  await fs.writeFile(name, content)
+async function fetchFile(github, target, destination) {
+  const { data } = await github.repos.getContent(target)
+  const content = Buffer.from(data.content, data.encoding).toString('utf8')
+  await fs.writeFile(destination, content)
   return content
-}
-
-module.exports = async () => {
-  try {
-    console.log('reading input')
-    const inputData = await fs.readFile(inputFile)
-    console.log('got input')
-    const { content, inputs } = JSON.parse(inputData.toString())
-    const html = await render(content, inputs)
-    const response = { html }
-    await fs.writeFile(outputFile, JSON.stringify(response))
-  } catch (error) {
-    console.log(error)
-    await fs.writeFile(errorFile, JSON.stringify(error, null, 2))
-    process.exit(1)
-  }
 }

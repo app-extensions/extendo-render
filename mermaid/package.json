@@ -1,10 +1,10 @@
 {
-  "name": "extendo-render-js",
+  "name": "extendo-render-mermaid",
   "version": "0.0.1",
-  "description": "Minified JS rendering for GitHub",
-  "main": "js.js",
+  "description": "Mermaid chart rendering for GitHub",
+  "main": "index.js",
   "scripts": {
-    "build": "ncc build -m",
+    "build": "docker build -t mermaid .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/app-extensions/extendo-render#readme",
   "dependencies": {
-    "js-beautify": "^1.13.5"
+    "@octokit/rest": "^18.5.2"
   }
 }

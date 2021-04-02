@@ -111,3 +111,4 @@ typings/
 config.yaml
 js/dist
 markvis/dist
+math/dist

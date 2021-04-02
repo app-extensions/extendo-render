@@ -19,7 +19,6 @@
   "homepage": "https://github.com/app-extensions/extendo-render#readme",
   "dependencies": {
     "d3-node": "^2.2.2",
-    "got": "^11.8.2",
     "markvis": "^0.0.12"
   }
 }

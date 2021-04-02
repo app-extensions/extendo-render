@@ -1,6 +1,6 @@
 const fs = require('fs')
 // const render = require('./dist/index')
-const render = require('./markvis')
+const render = require('./index')
 
 const content = `
 layout: line

@@ -1,0 +1,16 @@
+{
+  "content": null,
+  "options": {
+    "contentType": "application/ipynb"
+  },
+  "inputs": {
+    "dummy": "test input"
+  },
+  "context": {
+    "target": {
+      "owner": "app-extensions",
+      "repo": "test",
+      "path": "Lorenz.ipynb"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+name: Math equation rendering
+description: Render math equations found in markdown
+
+render:
+  markdown:
+    uses: ./index.js
+    with:
+      dummy: 'test input'
+  
