@@ -4,10 +4,10 @@ shared:
 internal:
   - actual: docker://extendo-render:mermaid
     logical: mermaid   # will surface as apps://extendo-render/mermaid for reference internally
-    commandLine: node /mermaid.js
+    commandLine: node /index.js
   - actual: docker://extendo-render:jupyter
     logical: jupyter   # will surface as apps://extendo-render/jupyter for reference internally
-    commandLine: node /jupyter.js
+    commandLine: node /index.js
 installed:
   - actual: ./mermaid/extension.yaml
     logical: render/github/mermaid/extension.yaml
