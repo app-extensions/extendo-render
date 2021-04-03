@@ -13,6 +13,7 @@ const inputNotebookFile = `${dataDir}/input.ipynb`
 const outputHTMLFile = `${dataDir}/input.html`
 
 module.exports = async ({content, context, inputs}) => {
+  await fs.writeFile(inputNotebookFile, content)
   const notebook = JSON.parse(content)
   inputs = { ...(get(notebook, 'metadata.github.render') || {}), ...(inputs || {}) }
   if (inputs.files) await fetchFiles(context.github, context.target, inputs.files)
