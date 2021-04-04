@@ -5,6 +5,16 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "XLSX",
+      "program": "${workspaceFolder}/xlsx/debug.js",
+      "cwd": "${workspaceFolder}/xlsx",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "pwa-node"
+    },
+    {
       "name": "Markvis",
       "program": "${workspaceFolder}/markvis/debug.js",
       "cwd": "${workspaceFolder}/markvis",

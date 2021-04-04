@@ -1,0 +1,9 @@
+name: Excel spreadsheet rendering
+description: Render XLSX files
+
+render:
+  file:
+    uses: ./index.js
+    with:
+      dummy: 'test input'
+  
