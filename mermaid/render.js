@@ -77,8 +77,8 @@ module.exports = async ({ content, inputs }) => {
     if (result.status === 'error') throw new Error(result.message)
 
     // await before returning to be sure we're good before the finally
-    const svg = await page.$eval('#container', container => container.innerHTML)
-    return { html: svg }
+    const html = await page.$eval('#container', container => container.innerHTML)
+    return { html }
   } finally {
     await browser.close()
   }
