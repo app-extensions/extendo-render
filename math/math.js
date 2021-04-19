@@ -7,7 +7,8 @@ const { RegisterHTMLHandler } = require('mathjax-full/js/handlers/html.js');
 
 const { AllPackages } = require('mathjax-full/js/input/tex/AllPackages.js');
 
-module.exports = async ({ content }) => {
+module.exports = async ({ context }) => {
+  const content = await context.render.getContent({}, 'utf8')
   const adaptor = liteAdaptor();
   RegisterHTMLHandler(adaptor);
   const tex = new TeX({ });
