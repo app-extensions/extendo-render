@@ -1,5 +1,5 @@
 name: extendo-render
-description: Amazing set of rendering capabilities for content on GitHub
+description: Amazing set of rendering capabilities for content on GitHub 
 application:
   visibility: universe
   permissions:
