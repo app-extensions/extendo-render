@@ -9,7 +9,7 @@ application:
   api:
   content:
     shared: 
-      - actual: ../../math/dist/index.js
+      - actual: ../../../math/dist/index.js
         logical: math   # will surface as apps://extendo-render/math
     internal:
       - actual: docker://extendo-render:mermaid
@@ -19,7 +19,7 @@ application:
         logical: jupyter   # will surface as apps://extendo-render/jupyter for reference internally
         commandLine: node /index.js
     installed:
-      - actual: ../../mermaid/extension.yaml
+      - actual: ../../../mermaid/extension.yaml
         logical: render/github/mermaid/extension.yaml
-      - actual: ../../jupyter/extension.yaml
+      - actual: ../../../jupyter/extension.yaml
         logical: render/github/ipynb.yaml
