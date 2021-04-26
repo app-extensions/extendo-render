@@ -107,8 +107,3 @@ typings/
 
 # App Specific
 
-*.pem
-config.yaml
-js/dist
-markvis/dist
-xlsx/dist
