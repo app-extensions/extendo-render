@@ -1,13 +1,11 @@
-// node
-const { mathjax } = require('mathjax-full/js/mathjax.js');
-const { TeX } = require('mathjax-full/js/input/tex.js');
-const { CHTML } = require('mathjax-full/js/output/chtml.js');
-const { liteAdaptor } = require('mathjax-full/js/adaptors/liteAdaptor.js');
-const { RegisterHTMLHandler } = require('mathjax-full/js/handlers/html.js');
+import mathjax from 'mathjax-full/js/mathjax.js'
+import TeX from 'mathjax-full/js/input/tex.js'
+import CHTML from 'mathjax-full/js/output/chtml.js'
+import liteAdaptor from 'mathjax-full/js/adaptors/liteAdaptor.js'
+import RegisterHTMLHandler from 'mathjax-full/js/handlers/html.js'
+import AllPackages from 'mathjax-full/js/input/tex/AllPackages.js'
 
-const { AllPackages } = require('mathjax-full/js/input/tex/AllPackages.js');
-
-module.exports = async ({ context }) => {
+export default async ({ context }) => {
   const content = await context.render.getContent({}, 'utf8')
   const adaptor = liteAdaptor();
   RegisterHTMLHandler(adaptor);
