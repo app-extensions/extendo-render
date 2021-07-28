@@ -5,21 +5,21 @@
 // import RegisterHTMLHandler from 'mathjax-full/js/handlers/html.js'
 // import AllPackages from 'mathjax-full/js/input/tex/AllPackages.js'
 
-const mathjax = require('mathjax-full/js/mathjax.js')
-const TeX = require('mathjax-full/js/input/tex.js')
-const CHTML = require('mathjax-full/js/output/chtml.js')
-const liteAdaptor = require('mathjax-full/js/adaptors/liteAdaptor.js')
-const RegisterHTMLHandler = require('mathjax-full/js/handlers/html.js')
-const AllPackages = require('mathjax-full/js/input/tex/AllPackages.js')
+const { mathjax } = require('mathjax-full/js/mathjax.js')
+const { TeX } = require('mathjax-full/js/input/tex.js')
+const { CHTML } = require('mathjax-full/js/output/chtml.js')
+const { liteAdaptor } = require('mathjax-full/js/adaptors/liteAdaptor.js')
+const { RegisterHTMLHandler } = require('mathjax-full/js/handlers/html.js')
+const { AllPackages } = require('mathjax-full/js/input/tex/AllPackages.js')
 
 // export default async ({ context }) => {
 module.exports = async ({ context }) => {
   const content = await context.render.getContent({}, 'utf8')
-  const adaptor = liteAdaptor();
-  RegisterHTMLHandler(adaptor);
-  const tex = new TeX({ });
-  const chtml = new CHTML({ fontURL: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2' });
-  const htmlConverter = mathjax.document('', { InputJax: tex, OutputJax: chtml });
+  const adaptor = liteAdaptor()
+  RegisterHTMLHandler(adaptor)
+  const tex = new TeX({});
+  const chtml = new CHTML({ fontURL: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2' })
+  const htmlConverter = mathjax.document('', { InputJax: tex, OutputJax: chtml })
 
   const display = content.startsWith('$$') || content.startsWith('\\[')
   const trimmed = trimContent(content)
