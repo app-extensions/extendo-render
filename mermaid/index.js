@@ -1,10 +1,9 @@
 // Relatively generic wrapper that's invoked as the CMD or ENTRY_POINT of the image. 
 
-// It 
-// * loads input.json
-// * fetches content if needed 
-// * Invokes the user's code
-// * writes the result either as output.json or error.json
+// * load input.json
+// * fetch content if needed 
+// * Invoke the user's code
+// * write the result either as output.json or error.json
 
 const fs = require('fs').promises
 const { Octokit } = require('@octokit/rest')
@@ -17,15 +16,16 @@ const errorFile = `${dataDir}/error.json`
 
 const loadAndRun = async () => {
   try {
-    // Load and shape the request data and content
-    const rawData = await fs.readFile(inputFile)
-    const data = JSON.parse(rawData.toString())
-    data.env = data.env || {}
-    data.inputs = data.inputs || {}
-    data.inputs.content = await fetchContent(data.inputs.content, process.env.GITHUB_TOKEN)
+    // Load and shape the request params and content
+    const rawParams = await fs.readFile(inputFile)
+    const params = JSON.parse(rawParams.toString())
+    params.api = { github: new Octokit({ auth: process.env.GITHUB_TOKEN }) }
+    params.env = params.env || {}
+    params.inputs = params.inputs || {}
+    params.inputs.content = await fetchContent(params.inputs.content, params.api.github)
 
-    // Invoke the renderer and write the result
-    const result = await code(data)
+    // Invoke the code and write the result
+    const result = await code(params)
     await fs.writeFile(outputFile, JSON.stringify(result))
     process.exit(0)
   } catch (error) {
@@ -37,10 +37,9 @@ const loadAndRun = async () => {
 
 loadAndRun()
 
-async function fetchContent(spec, token) {
+async function fetchContent(spec, github) {
   if (typeof spec === 'string') return spec
 
-  const github = new Octokit({ auth: token })
   const { data } = await github.repos.getContent(spec)
   return Buffer.from(data.content, data.encoding).toString('utf8')
 }
