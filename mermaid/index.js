@@ -1,13 +1,14 @@
-// Generic wrapper that 
-// * loads input.json, 
-// * fetches target content if needed, 
-// * sets up a lightweight context with octokit
-// * calls the renderer
+// Relatively generic wrapper that's invoked as the CMD or ENTRY_POINT of the image. 
+
+// It 
+// * loads input.json
+// * fetches content if needed 
+// * Invokes the user's code
 // * writes the result either as output.json or error.json
 
 const fs = require('fs').promises
 const { Octokit } = require('@octokit/rest')
-const render = require('./render')
+const code = require('./code')
 
 const dataDir = '/tmp/extendo-compute'
 const inputFile = `${dataDir}/input.json`
@@ -16,11 +17,15 @@ const errorFile = `${dataDir}/error.json`
 
 const loadAndRun = async () => {
   try {
-    const inputData = await fs.readFile(inputFile)
-    const { inputs, context, content } = JSON.parse(inputData.toString())
-    context.github = new Octokit({ auth: process.env.GITHUB_TOKEN })
-    const source = content || await fetchContent(context.github, context.target)
-    const result = await render({ content: source, context, inputs })
+    // Load and shape the request data and content
+    const rawData = await fs.readFile(inputFile)
+    const data = JSON.parse(rawData.toString())
+    data.env = data.env || {}
+    data.inputs = data.inputs || {}
+    data.inputs.content = await fetchContent(data.inputs.content, process.env.GITHUB_TOKEN)
+
+    // Invoke the renderer and write the result
+    const result = await code(data)
     await fs.writeFile(outputFile, JSON.stringify(result))
     process.exit(0)
   } catch (error) {
@@ -32,7 +37,10 @@ const loadAndRun = async () => {
 
 loadAndRun()
 
-async function fetchContent(octokit, target) {
-  const { data } = await octokit.repos.getContent(target)
+async function fetchContent(spec, token) {
+  if (typeof spec === 'string') return spec
+
+  const github = new Octokit({ auth: token })
+  const { data } = await github.repos.getContent(spec)
   return Buffer.from(data.content, data.encoding).toString('utf8')
 }

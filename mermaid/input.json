@@ -1,16 +1,5 @@
 {
-  "content": "graph TD;\n    A-->B;\n    A-->C;\n    B-->D;\n    C-->D;",
-  "options": {
-    "contentType": "github/mermaid"
-  },
   "inputs": {
-    "dummy": "test option"
-  },
-  "context": {
-    "target": {
-      "owner": "app-extensions",
-      "repo": "test",
-      "path": "README.md"
-    }
+    "content": "graph TD;\n    A-->B;\n    A-->C;\n    B-->D;\n    C-->D;"
   }
 }
