@@ -1,4 +1,6 @@
-tmp
+_tmp
+dist.tar
+trace.out
 
 # Logs
 logs
