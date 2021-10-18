@@ -1,0 +1,80 @@
+{
+  "key": {
+    "scope": 2,
+    "providerType": 3,
+    "providerId": 345733417,
+    "point": "render",
+    "path": "github/math",
+    "basename": "extension",
+    "providerPath": "render/github/math/extension.yaml",
+    "sha": "cf00923166f345fac548a614bf5eea5a5743353d"
+  },
+  "env": {
+    "FIGMA_TOKEN": "198127-95fdd94d-2a1e-4ce2-80ef-05422c99152e"
+  },
+  "inputs": {
+    "display": "inline",
+    "content": "$\\sqrt[n]{1+x+x^2+x^3+\\dots+x^n}$"
+  },
+  "contextSpecs": {
+    "target": {
+      "url": {
+        "type": "prop",
+        "value": "https://github.com/app-extensions/test/blob/main/math.md?raw=true"
+      },
+      "resource": {
+        "type": "prop",
+        "value": {
+          "type": 3,
+          "id": 344714955,
+          "owner": "app-extensions",
+          "repo": "test",
+          "path": "math.md",
+          "ref": "main"
+        }
+      },
+      "repo": {
+        "type": "prop",
+        "value": {
+          "owner": "app-extensions",
+          "repo": "test"
+        }
+      },
+      "getContent": {
+        "type": "function",
+        "value": "$\\sqrt[n]{1+x+x^2+x^3+\\dots+x^n}$"
+      },
+      "getFile": {
+        "type": "rest",
+        "base": "repos.getContent",
+        "defaults": {
+          "owner": "app-extensions",
+          "repo": "test",
+          "path": "math.md",
+          "ref": "main"
+        }
+      }
+    },
+    "render": {
+      "hash": {
+        "type": "prop",
+        "value": "45f63a53012fd52ad55aba7861c6604fd74d7197a94b2fe1ee0500997f97beb2"
+      },
+      "getContent": {
+        "type": "function",
+        "value": "$\\sqrt[n]{1+x+x^2+x^3+\\dots+x^n}$"
+      }
+    }
+  },
+  "apiSpecs": {
+    "github": {
+      "token": "ghs_EfjlgyBUDiaF8T2nffFM2eGu6zPa022KFw7A"
+    }
+  },
+  "target": {
+    "owner": "app-extensions",
+    "repo": "test",
+    "path": "math.md",
+    "ref": "main"
+  }
+}
