@@ -1,16 +1,18 @@
 {
-  "content": null,
-  "options": {
-    "contentType": "application/ipynb"
-  },
   "inputs": {
-    "dummy": "test input"
-  },
-  "context": {
-    "target": {
+    "content": {
       "owner": "app-extensions",
       "repo": "test",
       "path": "Lorenz.ipynb"
-    }
+    },
+    "contentType": "application/ipynb"
+  },
+  "target": {
+    "owner": "app-extensions",
+    "repo": "test",
+    "path": "Lorenz.ipynb"
+  },
+  "env": {
+    "GITHUB_TOKEN": "<ght>"
   }
 }

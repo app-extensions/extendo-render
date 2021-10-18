@@ -2,10 +2,9 @@
 # to have too much and it confuses jupyter
 FROM node:buster-slim 
 
-RUN apt-get update -y && \
-    apt-get install -y -o Acquire::Retries=10 --no-install-recommends \
-    python3 \
-    python3-pip 
+RUN apt-get update && apt-get -y update
+RUN apt-get install -y build-essential python3 python3-pip python3-dev
+RUN pip3 -q install pip --upgrade
 
 RUN python3 -m pip install ipykernel
 RUN python3 -m ipykernel install
@@ -26,10 +25,10 @@ ENV TMP=/tmp
 ENV MPLCONFIGDIR=/tmp
 ENV JUPYTER_CONFIG_DIR=/tmp/jupyter
 
-# May need to copy this over as the nbconvert files are in there but the jupyter config path still points there...
-# COPY /usr/local/etc/jupyter /tmp/jupyter
-
-COPY index.js render.js package.json package-lock.json /
+# Copy our little GitHub adapter. Split the package install and file copy to speed 
+# innerloop iteration on our code
+COPY package.json package-lock.json /
 RUN npm ci
+COPY index.js code.js /
 
 ENTRYPOINT [ "node", "/index.js" ]

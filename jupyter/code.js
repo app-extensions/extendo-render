@@ -12,11 +12,11 @@ const dataDir = '/tmp/extendo-compute'
 const inputNotebookFile = `${dataDir}/input.ipynb`
 const outputHTMLFile = `${dataDir}/input.html`
 
-module.exports = async ({content, context, inputs}) => {
-  await fs.writeFile(inputNotebookFile, content)
-  const notebook = JSON.parse(content)
+module.exports = async ({ inputs, target, api }) => {
+  const notebook = JSON.parse(inputs.content)
+  await fs.writeFile(inputNotebookFile, inputs.content)
   inputs = { ...(get(notebook, 'metadata.github.render') || {}), ...(inputs || {}) }
-  if (inputs.files) await fetchFiles(context.github, context.target, inputs.files)
+  if (inputs.files) await fetchFiles(api.github, target, inputs.files)
 
   const execute = inputs.execute ? '--execute' : ''
   const commandLine = `jupyter nbconvert --to HTML --log-level WARN ${execute} ${inputNotebookFile}`
