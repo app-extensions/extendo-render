@@ -1,21 +1,25 @@
-This is a Docker based Mermaid rendering handler. Ideally it would be a generic Docker image that adheres to an API contract somewhet like the other config handlers or Actions (or those converge) where we lay down some files in a known spot and the handler runs and gives the outputs in a known way. 
+# Mermaid rendering
 
-For now however, our approach to Docker support is bound to Lambda and the supplied image must be suitable for running as a lambda function.
-Going forward there are a few options to explore;
-* Can we [use Lambda layers and extensions](https://aws.amazon.com/blogs/compute/working-with-lambda-layers-and-extensions-in-container-images/) to inject our logic into the customer image?
-* Can we generate a new image that layers on our functionality?   
+This is a Docker based [Mermaid](https://mermaid-js.github.io/mermaid/#/) renderer that uses the [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli) project's [Docker image](https://hub.docker.com/r/minlag/mermaid-cli) setup but configures and runs Mermaid directly. We could also just call the CLI but, well, this is an example. 
 
+## Building
+
+Standard Docker build and give it a tag so we can run locally. 
+
+```shell
 docker build -t mermaid . 
-docker run -v c:\temp\tmp:/tmp mermaid ./node_modules/.bin/mmdc -i /tmp/content.mmd -o /tmp/content.svg -p ./puppeteer-config.json
+```
 
+## Testing
 
+You can run this renderer locally just using standard Docker commands and mount this dir as the `tmp/extendo-compute` folder for the container to use. You only need to set the `GITHUB_TOKEN` env var if your `input.json` points to a file on GitHub that requires a token to access. Note you can also embed the Mermaid diagram spec directly in the `input.json` `inputs.contents` property. 
 
-docker run -v c:\temp\tmp:/tmp -it mermaid bash
-node --unhandled-rejections=strict ./node_modules/@mermaid-js/mermaid-cli/index.bundle.js -i /tmp/content.mmd -o /tmp/content.svg -p ./puppeteer-config.json
+```shell
+docker run -it -v (pwd)/samples/<sample to run>:/tmp/extendo-compute -env GITHUB_TOKEN <PAT if needed> mermaid
+```
+So, for example, the following renders a simple diagram
 
-node ./test.js -i /tmp/content.mmd -o /tmp/content.svg -p ./puppeteer-config.json
-node --unhandled-rejections=strict --trace-warnings ./test.js -i /tmp/content.mmd -o /tmp/content.svg -p ./puppeteer-config.json
+```shell
+docker run -it -v $(pwd)/samples/simple:/tmp/extendo-compute mermaid
+```
 
-node ./node_modules/@mermaid-js/mermaid-cli/test.js -i /tmp/content.mmd -o /tmp/content.svg -p ./puppeteer-config.json
-
-node ./test.js

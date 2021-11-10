@@ -19,7 +19,10 @@ const loadAndRun = async () => {
     // Load and shape the request params and content
     const rawParams = await fs.readFile(inputFile)
     const params = JSON.parse(rawParams.toString())
-    params.api = { github: new Octokit({ auth: process.env.GITHUB_TOKEN }) }
+    const octoArgs = {}
+    if (process.env.GITHUB_TOKEN) octoArgs.auth = process.env.GITHUB_TOKEN
+    console.dir(octoArgs)
+    params.api = { github: new Octokit(octoArgs) }
     params.env = params.env || {}
     params.inputs = params.inputs || {}
     params.inputs.content = await fetchContent(params.inputs.content, params.api.github)
