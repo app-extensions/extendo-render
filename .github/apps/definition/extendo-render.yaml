@@ -21,3 +21,4 @@ application:
         logical: render/github/mermaid/extension.yaml
       - actual: ../../../jupyter/extension.yaml
         logical: render/github/ipynb.yaml
+        
