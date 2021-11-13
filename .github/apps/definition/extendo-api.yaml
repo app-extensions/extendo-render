@@ -8,5 +8,5 @@ application:
   content:
     installed:
       - actual: ../../../api/getHandler.js
-        logical: api/extendo-render/get.js
+        logical: api/extendo-api/get.js
         
