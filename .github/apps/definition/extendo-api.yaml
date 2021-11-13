@@ -9,4 +9,6 @@ application:
     installed:
       - actual: ../../../api/getHandler.js
         logical: api/extendo-api/get.js
+      - actual: ../../../api/postHandler.js
+        logical: api/extendo-api/post.js
         
