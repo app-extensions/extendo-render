@@ -5,20 +5,18 @@ application:
   permissions:
     contents: read
     metadata: read
-  events:
-  api:
   content:
     shared: 
       - actual: ../../../math/dist/index.js
         logical: math   # will surface as apps://extendo-render/math
     internal:
-      - actual: image://extendo-render:mermaid
+      - actual: image://jeffmcaffer/mermaid:1
         logical: mermaid   # will surface as apps://extendo-render/mermaid for reference internally
-        commandLine: node /index.js
-      - actual: image://extendo-render:jupyter
+      - actual: image://jeffmcaffer/jupyter:1
         logical: jupyter   # will surface as apps://extendo-render/jupyter for reference internally
-        commandLine: node /index.js
     installed:
+      - actual: ../../../api/getHandler.js
+        logical: api/extendo-render/get.js
       - actual: ../../../mermaid/extension.yaml
         logical: render/github/mermaid/extension.yaml
       - actual: ../../../jupyter/extension.yaml
