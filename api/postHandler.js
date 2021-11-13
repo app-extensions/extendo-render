@@ -1,4 +1,4 @@
-({ inputs, api, log }) => {
+async ({ inputs, api, log }) => {
   const { path, body } = inputs
   const old = await api.keyValue.get(path)
   await api.keyValue.set(path, body)

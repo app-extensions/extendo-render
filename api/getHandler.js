@@ -1,4 +1,5 @@
-({ inputs }) => {
+async ({ inputs, api }) => {
   const { resource, params, path } = inputs
-  return `Hello ${params.who} from ${resource.typeName} ${resource.name} with path: "${path}""`
+  const current = await api.keyValue.get(path)
+  return `Hello ${params.who} from ${resource.typeName} ${resource.name}\nThe value at path: "${path}" is:\n${JSON.stringify(current)}\n`
 }
