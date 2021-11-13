@@ -1,0 +1,12 @@
+name: extendo-api
+description: Set of interesting App API samples
+application:
+  visibility: universe
+  permissions:
+    contents: read
+    metadata: read
+  content:
+    installed:
+      - actual: ../../../api/getHandler.js
+        logical: api/extendo-render/get.js
+        

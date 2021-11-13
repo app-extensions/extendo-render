@@ -15,8 +15,6 @@ application:
       - actual: image://jeffmcaffer/jupyter:1
         logical: jupyter   # will surface as apps://extendo-render/jupyter for reference internally
     installed:
-      - actual: ../../../api/getHandler.js
-        logical: api/extendo-render/get.js
       - actual: ../../../mermaid/extension.yaml
         logical: render/github/mermaid/extension.yaml
       - actual: ../../../jupyter/extension.yaml
