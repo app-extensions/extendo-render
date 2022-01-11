@@ -13,6 +13,17 @@ const inputNotebookFile = `${dataDir}/input.ipynb`
 const outputHTMLFile = `${dataDir}/input.html`
 
 module.exports = async ({ inputs, target, api }) => {
+  return {
+    html: `
+<p>
+  Jupyter Notebook rendering temporarly unavailable due to machine configuration issues likely
+  <a href="https://unix.stackexchange.com/questions/253903/creating-threads-fails-with-resource-temporarily-unavailable-with-4-3-kernel">related to thread creation</a>
+  when running the container using <pre>runc</pre>. Need someone with more Linux/kernel/container understanding to debug. See 
+  <a href="https://github.com/github/extendo-compute-image/blob/main/tools/config.template.json"> the default container runtime configuration</a>. 
+  Could also be that we're just running out of memory or some other resource.
+</p>
+`
+  }
   const notebook = JSON.parse(inputs.content)
   await fs.writeFile(inputNotebookFile, inputs.content)
   inputs = { ...(get(notebook, 'metadata.github.render') || {}), ...(inputs || {}) }
