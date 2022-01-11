@@ -24,7 +24,7 @@ module.exports = async ({ inputs, target, api }) => {
   await new Promise((resolve, reject) => {
     child.stdout.on('data', data => process.stdout.write(`child-out: ${data}`))
     child.stderr.on('data', data => process.stderr.write(`child-err: ${data}`))
-    child.on('error', error => reject(error))
+    child.on('error', reject)
     child.on('exit', code => {
       // purposefully reject with a non-Error here so the catch knows to look for an error file
       if (code !== 0) return reject('Exec exited with non-zero code: ' + code)

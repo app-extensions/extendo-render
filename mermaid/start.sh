@@ -1,0 +1,1 @@
+../../extendo-compute-image/tools/start.sh $*

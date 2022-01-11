@@ -1,6 +1,0 @@
-{
-  "errno": -2,
-  "code": "ENOENT",
-  "syscall": "open",
-  "path": "/tmp/extendo-compute/input.json"
-}

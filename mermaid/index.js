@@ -21,7 +21,6 @@ const loadAndRun = async () => {
     const params = JSON.parse(rawParams.toString())
     const octoArgs = process.env.GITHUB_TOKEN ? { auth: process.env.GITHUB_TOKEN } : {}
     params.api = { github: new Octokit(octoArgs) }
-    params.env = params.env || {}
     params.inputs = params.inputs || {}
     params.inputs.content = await fetchContent(params.inputs.content, params.api.github)
 
