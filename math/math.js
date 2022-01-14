@@ -12,9 +12,9 @@ const { liteAdaptor } = require('mathjax-full/js/adaptors/liteAdaptor.js')
 const { RegisterHTMLHandler } = require('mathjax-full/js/handlers/html.js')
 const { AllPackages } = require('mathjax-full/js/input/tex/AllPackages.js')
 
-// export default async ({ context }) => {
-module.exports = async ({ context }) => {
-  const content = await context.render.getContent({}, 'utf8')
+// export default async ({ render }) => {
+module.exports = async ({ render }) => {
+  const content = await render.getContent({}, 'utf8')
   const adaptor = liteAdaptor()
   RegisterHTMLHandler(adaptor)
   const tex = new TeX({});
