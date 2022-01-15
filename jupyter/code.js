@@ -12,7 +12,7 @@ const dataDir = '/tmp/extendo-compute'
 const inputNotebookFile = `${dataDir}/input.ipynb`
 const outputHTMLFile = `${dataDir}/input.html`
 
-module.exports = async ({ inputs, target, api }) => {
+module.exports = async ({ inputs, context, helpers, render }) => {
   return {
     html: `
 <p>
@@ -24,10 +24,11 @@ module.exports = async ({ inputs, target, api }) => {
 </p>
 `
   }
-  const notebook = JSON.parse(inputs.content)
-  await fs.writeFile(inputNotebookFile, inputs.content)
+  const content = await render.getContent()
+  const notebook = JSON.parse(content)
+  await fs.writeFile(inputNotebookFile, content)
   inputs = { ...(get(notebook, 'metadata.github.render') || {}), ...(inputs || {}) }
-  if (inputs.files) await fetchFiles(api.github, target, inputs.files)
+  if (inputs.files) await fetchFiles(helpers.github, context.target, inputs.files)
 
   const execute = inputs.execute ? '--execute' : ''
   const commandLine = `jupyter nbconvert --to HTML --log-level WARN ${execute} ${inputNotebookFile}`
@@ -54,8 +55,8 @@ async function fetchFiles(github, target, files) {
   }
 }
 
-async function fetchFile(github, target, destination) {
-  const { data } = await github.repos.getContent(target)
+async function fetchFile(github, source, destination) {
+  const { data } = await github.repos.getContent(source)
   const content = Buffer.from(data.content, data.encoding).toString('utf8')
   await fs.writeFile(destination, content)
   return content

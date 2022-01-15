@@ -53,7 +53,7 @@ const defaultArgs = [
   '--single-process'
 ]
 
-module.exports = async ({ inputs }) => {
+module.exports = async ({ inputs, render }) => {
   const browser = await puppeteer.launch({ args: defaultArgs })
   try {
     const page = await browser.newPage()
@@ -72,8 +72,9 @@ module.exports = async ({ inputs }) => {
         return { status: 'error', error, message: error.message }
       }
     }
+    const content = await render.getContent()
     const config = { ...defaultConfig, ...inputs.config }
-    const result = await page.$eval('#container', setup, inputs.content, config)
+    const result = await page.$eval('#container', setup, content, config)
     if (result.status === 'error') throw new Error(result.message)
 
     // await before returning to be sure we're good before the finally
