@@ -12,7 +12,7 @@ const dataDir = '/tmp/extendo-compute'
 const inputNotebookFile = `${dataDir}/input.ipynb`
 const outputHTMLFile = `${dataDir}/input.html`
 
-module.exports = async ({ inputs, context, helpers, render }) => {
+module.exports = async ({ render, inputs, helpers }) => {
   return {
     html: `
 <p>
@@ -28,7 +28,7 @@ module.exports = async ({ inputs, context, helpers, render }) => {
   const notebook = JSON.parse(content)
   await fs.writeFile(inputNotebookFile, content)
   inputs = { ...(get(notebook, 'metadata.github.render') || {}), ...(inputs || {}) }
-  if (inputs.files) await fetchFiles(helpers.github, context.target, inputs.files)
+  if (inputs.files) await fetchFiles(helpers.octokit, render.fileSpec, inputs.files)
 
   const execute = inputs.execute ? '--execute' : ''
   const commandLine = `jupyter nbconvert --to HTML --log-level WARN ${execute} ${inputNotebookFile}`
@@ -47,16 +47,17 @@ module.exports = async ({ inputs, context, helpers, render }) => {
   return { html: result.toString() }
 }
 
-async function fetchFiles(github, target, files) {
+async function fetchFiles(octokit, target, files) {
   for (const file of files) {
     const destination = path.join(dataDir, file)
-    const source = { ...target, path: path.join(path.dirname(target.path), file) }
-    await fetchFile(github, source, destination)
+    // only allow references to files in the same repo
+    const source = { owner: target.owner, repo: target.repo, path: path.join(path.dirname(target.path), file) }
+    await fetchFile(octokit, source, destination)
   }
 }
 
-async function fetchFile(github, source, destination) {
-  const { data } = await github.repos.getContent(source)
+async function fetchFile(octokit, source, destination) {
+  const { data } = await octokit.repos.getContent(source)
   const content = Buffer.from(data.content, data.encoding).toString('utf8')
   await fs.writeFile(destination, content)
   return content

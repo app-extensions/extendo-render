@@ -21,10 +21,10 @@ const loadAndRun = async () => {
     const params = JSON.parse(rawParams.toString())
     if (!params.render.content) throw new Error(`params.render.content not set. Nothing to do`)
     const octoArgs = process.env.GITHUB_TOKEN ? { auth: process.env.GITHUB_TOKEN } : {}
-    params.helpers = { github: new Octokit(octoArgs) }
+    params.helpers = { octokit: new Octokit(octoArgs) }
     // Grab a proper reference to the getContent spec as we're about to overwrite it but want the original value later.
     const getContentSpec = params.render.getContent
-    params.render.getContent = () => { return fetchContent(getContentSpec, params.helpers.github) }
+    params.render.getContent = () => { return fetchContent(getContentSpec, params.helpers.octokit) }
 
     // Invoke the code and write the result
     const result = await code(params)
@@ -40,10 +40,10 @@ const loadAndRun = async () => {
 loadAndRun()
 
 // Interpret the supplied spce to get and return the content to render
-async function fetchContent(spec, github) {
+async function fetchContent(spec, octokit) {
   if (spec.type === 'function') return spec.value
   if (spec.type === 'github') {
-    const { data } = await github.repos.getContent(spec.defaults)
+    const { data } = await octokit.repos.getContent(spec.defaults)
     return Buffer.from(data.content, data.encoding).toString('utf8')
   }
 }
