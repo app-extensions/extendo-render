@@ -1,1 +1,0 @@
-../../extendo-compute-image/tools/trigger.sh $*
