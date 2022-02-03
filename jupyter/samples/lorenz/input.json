@@ -1,14 +1,14 @@
 {
   "inputs": {
     "content": {
-      "owner": "app-extensions",
+      "owner": "extendohub",
       "repo": "test",
       "path": "Lorenz.ipynb"
     },
     "contentType": "application/ipynb"
   },
   "target": {
-    "owner": "app-extensions",
+    "owner": "extendohub",
     "repo": "test",
     "path": "Lorenz.ipynb"
   }

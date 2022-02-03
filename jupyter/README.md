@@ -45,7 +45,7 @@ If the caller (you) needs permissions to access the file (e.g., it's in a privat
 ```json
 {
   "inputs": {
-    "content": { "owner": "app-extensions", "repo": "extendo-render-app", "path": "mermaid/samples/structure/structure.mmd" }
+    "content": { "owner": "extendohub", "repo": "extendo-render-app", "path": "mermaid/samples/structure/structure.mmd" }
   }
 }
 ```
